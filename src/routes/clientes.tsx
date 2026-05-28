@@ -80,14 +80,19 @@ function ClientesPage() {
       parsed.error.issues.forEach((i) => { errs[String(i.path[0])] = i.message; });
       setErrors(errs);
       return;
-    }
     try {
-      if (editing) { await updateCliente(editing.id, parsed.data); toast.success("Cliente actualizado"); }
-      else { await addCliente(parsed.data); toast.success("Cliente registrado"); }
+      const data = {
+        nombre: parsed.data.nombre,
+        cedula: parsed.data.cedula,
+        telefono: parsed.data.telefono ?? "",
+        correo: parsed.data.correo ?? "",
+        direccion: parsed.data.direccion ?? "",
+        estado: parsed.data.estado,
+      };
+      if (editing) { await updateCliente(editing.id, data); toast.success("Cliente actualizado"); }
+      else { await addCliente(data); toast.success("Cliente registrado"); }
       setOpen(false);
     } catch (e: any) { toast.error(e.message ?? "Error al guardar"); }
-  };
-
   const remove = async (c: Cliente) => {
     if (!confirm(`¿Eliminar a ${c.nombre}? Esta acción no se puede deshacer.`)) return;
     try { await deleteCliente(c.id); toast.success("Cliente eliminado"); }
