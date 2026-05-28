@@ -149,7 +149,7 @@ export function CrmProvider({ children }: { children: ReactNode }) {
       hojasAhorradas: procesosDigitalizados * PAPEL_POR_PROCESO,
       reload,
       addCliente: async (c) => {
-        const { data, error } = await supabase.from("clientes").insert({ ...toClienteRow(c), created_by: user?.id }).select().single();
+        const { data, error } = await supabase.from("clientes").insert({ ...toClienteRow(c), created_by: user?.id } as any).select().single();
         if (error || !data) throw error;
         const nuevo = mapCliente(data);
         setClientes((p) => [nuevo, ...p]);
@@ -166,7 +166,7 @@ export function CrmProvider({ children }: { children: ReactNode }) {
         setClientes((p) => p.filter((x) => x.id !== id));
       },
       addVehiculo: async (v) => {
-        const { data, error } = await supabase.from("vehiculos").insert({ ...toVehiculoRow(v), created_by: user?.id }).select().single();
+        const { data, error } = await supabase.from("vehiculos").insert({ ...toVehiculoRow(v), created_by: user?.id } as any).select().single();
         if (error || !data) throw error;
         const nuevo = mapVehiculo(data);
         setVehiculos((p) => [nuevo, ...p]);
