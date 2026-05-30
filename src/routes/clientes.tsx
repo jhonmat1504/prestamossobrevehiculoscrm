@@ -46,6 +46,8 @@ function ClientesPage() {
   const [form, setForm] = useState(empty);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [detail, setDetail] = useState<Cliente | null>(null);
+  const [tlTipo, setTlTipo] = useState<"Todos" | "Compra" | "Venta" | "Préstamo">("Todos");
+  const [tlEstado, setTlEstado] = useState<"Todos" | "Pendiente" | "Vigente" | "Completada" | "Vencida">("Todos");
 
   const filtered = useMemo(() => {
     const s = q.toLowerCase().trim();
