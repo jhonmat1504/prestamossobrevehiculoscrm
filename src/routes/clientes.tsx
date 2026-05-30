@@ -322,8 +322,37 @@ function ClientesPage() {
                     </div>
                   </CardHeader>
                   <CardContent>
+                    <div className="mb-3 flex flex-wrap gap-2">
+                      <Select value={tlTipo} onValueChange={(v) => setTlTipo(v as any)}>
+                        <SelectTrigger className="h-8 w-[140px] text-xs"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Todos">Todos los tipos</SelectItem>
+                          <SelectItem value="Compra">Compras</SelectItem>
+                          <SelectItem value="Venta">Ventas</SelectItem>
+                          <SelectItem value="Préstamo">Préstamos</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={tlEstado} onValueChange={(v) => setTlEstado(v as any)}>
+                        <SelectTrigger className="h-8 w-[150px] text-xs"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Todos">Todos los estados</SelectItem>
+                          <SelectItem value="Pendiente">Pendiente</SelectItem>
+                          <SelectItem value="Vigente">Vigente</SelectItem>
+                          <SelectItem value="Completada">Completada</SelectItem>
+                          <SelectItem value="Vencida">Vencida</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {(tlTipo !== "Todos" || tlEstado !== "Todos") && (
+                        <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => { setTlTipo("Todos"); setTlEstado("Todos"); }}>
+                          Limpiar
+                        </Button>
+                      )}
+                      <span className="ml-auto self-center text-xs text-muted-foreground">
+                        {clienteTimeline.length} {clienteTimeline.length === 1 ? "evento" : "eventos"}
+                      </span>
+                    </div>
                     {clienteTimeline.length === 0 && (
-                      <p className="py-6 text-center text-sm text-muted-foreground">Sin transacciones registradas</p>
+                      <p className="py-6 text-center text-sm text-muted-foreground">Sin eventos para los filtros seleccionados</p>
                     )}
                     <ol className="relative space-y-4 border-l border-border pl-5">
                       {clienteTimeline.map((t) => (
