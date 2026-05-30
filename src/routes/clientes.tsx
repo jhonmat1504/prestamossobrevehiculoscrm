@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { z } from "zod";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -25,6 +25,7 @@ export const Route = createFileRoute("/clientes")({
 const estados: ClienteEstado[] = ["Activo", "Inactivo", "Moroso"];
 const empty = { nombre: "", cedula: "", telefono: "", correo: "", direccion: "", estado: "Activo" as ClienteEstado };
 const PAGE_SIZE = 10;
+const TL_PAGE_SIZE = 10;
 
 const clienteSchema = z.object({
   nombre: z.string().trim().min(2, "Nombre muy corto").max(120),
@@ -48,6 +49,7 @@ function ClientesPage() {
   const [detail, setDetail] = useState<Cliente | null>(null);
   const [tlTipo, setTlTipo] = useState<"Todos" | "Compra" | "Venta" | "Préstamo">("Todos");
   const [tlEstado, setTlEstado] = useState<"Todos" | "Pendiente" | "Vigente" | "Completada" | "Vencida">("Todos");
+  const [tlVisibleCount, setTlVisibleCount] = useState(TL_PAGE_SIZE);
 
   const filtered = useMemo(() => {
     const s = q.toLowerCase().trim();
@@ -127,6 +129,11 @@ function ClientesPage() {
       .sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
     return txs;
   }, [detail, transacciones, vehiculos, tlTipo, tlEstado]);
+
+  const displayedTimeline = useMemo(() => clienteTimeline.slice(0, tlVisibleCount), [clienteTimeline, tlVisibleCount]);
+  const hasMoreTimeline = displayedTimeline.length < clienteTimeline.length;
+
+  useEffect(() => { setTlVisibleCount(TL_PAGE_SIZE); }, [detail, tlTipo, tlEstado]);
 
   const totales = useMemo(() => {
     if (!detail) return { total: 0, compras: 0, ventas: 0, prestamos: 0, montoTotal: 0 };
@@ -348,14 +355,14 @@ function ClientesPage() {
                         </Button>
                       )}
                       <span className="ml-auto self-center text-xs text-muted-foreground">
-                        {clienteTimeline.length} {clienteTimeline.length === 1 ? "evento" : "eventos"}
+                        Mostrando {displayedTimeline.length} de {clienteTimeline.length} {clienteTimeline.length === 1 ? "evento" : "eventos"}
                       </span>
                     </div>
                     {clienteTimeline.length === 0 && (
                       <p className="py-6 text-center text-sm text-muted-foreground">Sin eventos para los filtros seleccionados</p>
                     )}
                     <ol className="relative space-y-4 border-l border-border pl-5">
-                      {clienteTimeline.map((t) => (
+                      {displayedTimeline.map((t) => (
                         <li key={t.id} className="relative">
                           <span className="absolute -left-[26px] flex h-4 w-4 items-center justify-center rounded-full bg-primary ring-4 ring-background">
                             {t.tipo === "Compra" && <DollarSign className="h-2.5 w-2.5 text-primary-foreground" />}
@@ -376,6 +383,13 @@ function ClientesPage() {
                         </li>
                       ))}
                     </ol>
+                    {hasMoreTimeline && (
+                      <div className="mt-4 flex justify-center">
+                        <Button variant="outline" size="sm" onClick={() => setTlVisibleCount((c) => c + TL_PAGE_SIZE)}>
+                          Cargar más eventos
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
