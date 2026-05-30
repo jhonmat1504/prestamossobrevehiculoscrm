@@ -1,4 +1,5 @@
 {
+  "rootDirectory": "prestamossobrevehiculoscrm",
   "cleanUrls": true,
   "rewrites": [
     {
