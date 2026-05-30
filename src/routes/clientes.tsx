@@ -109,6 +109,8 @@ function ClientesPage() {
     if (!detail) return [];
     const txs = transacciones
       .filter((t) => t.clienteId === detail.id)
+      .filter((t) => tlTipo === "Todos" || t.tipo === tlTipo)
+      .filter((t) => tlEstado === "Todos" || t.estado === tlEstado)
       .map((t) => {
         const v = vehiculos.find((x) => x.id === t.vehiculoId);
         return {
@@ -124,7 +126,7 @@ function ClientesPage() {
       })
       .sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
     return txs;
-  }, [detail, transacciones, vehiculos]);
+  }, [detail, transacciones, vehiculos, tlTipo, tlEstado]);
 
   const totales = useMemo(() => {
     if (!detail) return { total: 0, compras: 0, ventas: 0, prestamos: 0, montoTotal: 0 };
