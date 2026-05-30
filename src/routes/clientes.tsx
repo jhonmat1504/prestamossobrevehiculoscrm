@@ -355,14 +355,14 @@ function ClientesPage() {
                         </Button>
                       )}
                       <span className="ml-auto self-center text-xs text-muted-foreground">
-                        {clienteTimeline.length} {clienteTimeline.length === 1 ? "evento" : "eventos"}
+                        Mostrando {displayedTimeline.length} de {clienteTimeline.length} {clienteTimeline.length === 1 ? "evento" : "eventos"}
                       </span>
                     </div>
                     {clienteTimeline.length === 0 && (
                       <p className="py-6 text-center text-sm text-muted-foreground">Sin eventos para los filtros seleccionados</p>
                     )}
                     <ol className="relative space-y-4 border-l border-border pl-5">
-                      {clienteTimeline.map((t) => (
+                      {displayedTimeline.map((t) => (
                         <li key={t.id} className="relative">
                           <span className="absolute -left-[26px] flex h-4 w-4 items-center justify-center rounded-full bg-primary ring-4 ring-background">
                             {t.tipo === "Compra" && <DollarSign className="h-2.5 w-2.5 text-primary-foreground" />}
@@ -383,6 +383,13 @@ function ClientesPage() {
                         </li>
                       ))}
                     </ol>
+                    {hasMoreTimeline && (
+                      <div className="mt-4 flex justify-center">
+                        <Button variant="outline" size="sm" onClick={() => setTlVisibleCount((c) => c + TL_PAGE_SIZE)}>
+                          Cargar más eventos
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
