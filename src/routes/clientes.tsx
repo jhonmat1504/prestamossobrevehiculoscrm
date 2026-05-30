@@ -130,6 +130,11 @@ function ClientesPage() {
     return txs;
   }, [detail, transacciones, vehiculos, tlTipo, tlEstado]);
 
+  const displayedTimeline = useMemo(() => clienteTimeline.slice(0, tlVisibleCount), [clienteTimeline, tlVisibleCount]);
+  const hasMoreTimeline = displayedTimeline.length < clienteTimeline.length;
+
+  useEffect(() => { setTlVisibleCount(TL_PAGE_SIZE); }, [detail, tlTipo, tlEstado]);
+
   const totales = useMemo(() => {
     if (!detail) return { total: 0, compras: 0, ventas: 0, prestamos: 0, montoTotal: 0 };
     const txs = transacciones.filter((t) => t.clienteId === detail.id);
