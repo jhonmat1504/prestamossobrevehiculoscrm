@@ -25,6 +25,7 @@ export const Route = createFileRoute("/clientes")({
 const estados: ClienteEstado[] = ["Activo", "Inactivo", "Moroso"];
 const empty = { nombre: "", cedula: "", telefono: "", correo: "", direccion: "", estado: "Activo" as ClienteEstado };
 const PAGE_SIZE = 10;
+const TL_PAGE_SIZE = 10;
 
 const clienteSchema = z.object({
   nombre: z.string().trim().min(2, "Nombre muy corto").max(120),
@@ -48,6 +49,7 @@ function ClientesPage() {
   const [detail, setDetail] = useState<Cliente | null>(null);
   const [tlTipo, setTlTipo] = useState<"Todos" | "Compra" | "Venta" | "Préstamo">("Todos");
   const [tlEstado, setTlEstado] = useState<"Todos" | "Pendiente" | "Vigente" | "Completada" | "Vencida">("Todos");
+  const [tlVisibleCount, setTlVisibleCount] = useState(TL_PAGE_SIZE);
 
   const filtered = useMemo(() => {
     const s = q.toLowerCase().trim();
