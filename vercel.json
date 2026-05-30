@@ -1,9 +1,11 @@
 {
   "cleanUrls": true,
+  "buildCommand": "cd prestamossobrevehiculoscrm && npm install && npm run build",
+  "outputDirectory": "prestamossobrevehiculoscrm/dist",
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/prestamossobrevehiculoscrm/$1"
+      "destination": "/index.html"
     }
   ]
 }
