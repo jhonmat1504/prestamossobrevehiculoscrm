@@ -1,8 +1,5 @@
 {
-  "version": 2,
   "cleanUrls": true,
-  "buildCommand": "cd prestamossobrevehiculoscrm && bun install && bun run build",
-  "outputDirectory": "prestamossobrevehiculoscrm/dist/client",
   "rewrites": [
     {
       "source": "/(.*)",
